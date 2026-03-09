@@ -26,16 +26,22 @@ jobs:
           mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest
           wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
           unzip cmdline-tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools/latest
-          # Aceptar todas las licencias
+          # Aceptar licencias automáticamente
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
           # Instalar herramientas necesarias
           $ANDROID_SDK_ROOT/cmdline-tools/latest/cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-33" "build-tools;33.0.0"
+
+      - name: Install python-for-android
+        run: |
+          python3 -m pip install --upgrade python-for-android
 
       - name: Build APK
         run: |
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           # Limpiar compilaciones previas
           buildozer android clean
+          # Actualizar platform y dependencias
+          buildozer android update
           # Compilar APK
           buildozer android debug
 
