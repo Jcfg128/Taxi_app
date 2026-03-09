@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Clonar repositorio
-      - name: Checkout code
+      # 1️⃣ Clonar el repositorio
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       # 2️⃣ Instalar dependencias del sistema
@@ -19,7 +19,7 @@ jobs:
           sudo apt update
           sudo apt install -y python3-pip git unzip openjdk-17-jdk wget curl zip
 
-      # 3️⃣ Cache de pip para acelerar builds
+      # 3️⃣ Cache de pip
       - name: Cache pip
         uses: actions/cache@v3
         with:
@@ -28,25 +28,30 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      # 4️⃣ Instalar Buildozer, Cython y Python-for-Android
-      - name: Install Buildozer and dependencies
+      # 4️⃣ Instalar Buildozer y dependencias
+      - name: Install Buildozer, Cython and Python-for-Android
         run: |
           python3 -m pip install --upgrade pip
           pip install buildozer cython python-for-android
 
-      # 5️⃣ Configurar Android SDK
+      # 5️⃣ Configurar Android SDK y Build-Tools estables
       - name: Setup Android SDK
         run: |
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest
           wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
           unzip cmdline-tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools/latest
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
+
+          # Aceptar licencias automáticamente
+          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/cmdline-tools/bin/sdkmanager --licenses
+
+          # Instalar herramientas necesarias (estables)
+          $ANDROID_SDK_ROOT/cmdline-tools/latest/cmdline-tools/bin/sdkmanager \
+            --sdk_root=$ANDROID_SDK_ROOT \
             "platform-tools" "platforms;android-33" "build-tools;33.0.0"
 
-      # 6️⃣ Cache de Buildozer y Android SDK/NDK para acelerar builds futuros
-      - name: Cache Buildozer and Android SDK
+      # 6️⃣ Cache Buildozer y Android SDK/NDK
+      - name: Cache Buildozer and SDK
         uses: actions/cache@v3
         with:
           path: |
@@ -60,7 +65,7 @@ jobs:
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           buildozer android clean || true
 
-      # 8️⃣ Forzar preparación de Python-for-Android
+      # 8️⃣ Preparar Python-for-Android
       - name: Prepare Python-for-Android
         run: |
           export ANDROID_SDK_ROOT=$HOME/android-sdk
