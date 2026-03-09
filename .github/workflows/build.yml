@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Clonar repositorio
+      # 1️⃣ Clonar el repositorio
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -49,7 +49,7 @@ jobs:
 
           # Instalar herramientas necesarias (estables)
           $ANDROID_SDK_ROOT/cmdline-tools/latest/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
-            "platform-tools" "platforms;android-33" "build-tools;33.0.0"
+            "platform-tools" "platforms;android-33" "build-tools;33.0.0" "ndk;25.1.8937393"
 
       # 6️⃣ Cache Buildozer y Android SDK/NDK
       - name: Cache Buildozer and SDK
@@ -72,13 +72,20 @@ jobs:
           export ANDROID_SDK_ROOT=$HOME/android-sdk
           buildozer android update
 
-      # 9️⃣ Compilar APK
+      # 9️⃣ Configurar Buildozer para usar SDK/NDK directamente
+      - name: Set Buildozer SDK/NDK paths
+        run: |
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.1.8937393
+
+      # 🔟 Compilar APK
       - name: Build APK
         run: |
           export ANDROID_SDK_ROOT=$HOME/android-sdk
+          export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.1.8937393
           buildozer android debug
 
-      # 🔟 Subir APK como artefacto
+      # 1️⃣1️⃣ Subir APK como artefacto
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
