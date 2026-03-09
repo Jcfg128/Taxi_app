@@ -35,6 +35,8 @@ jobs:
       - name: Install SDK components
         run: |
           sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+      - name: Clean previous buildozer cache
+        run: rm -rf .buildozer ~/.buildozer
 
       - name: Build APK
         run: buildozer android debug
