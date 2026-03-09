@@ -66,5 +66,4 @@ jobs:
           name: taxicalc-apk
           path: bin/*.apk
 
-        run: buildozer android debug
  
