@@ -7,11 +7,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      -name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Install system dependencies
-        run: |
+      -name: Install system dependencies
+      run: |
           sudo apt update
           sudo apt install -y \
             python3-pip \
@@ -26,8 +26,8 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install cython buildozer
 
-       - name: Install Android SDK
-         run: |
+      -name: Install Android SDK
+      run: |
            mkdir -p $HOME/android-sdk/cmdline-tools/latest
            cd $HOME/android-sdk/cmdline-tools/latest
 
@@ -43,17 +43,17 @@ jobs:
            echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
 
 
-      - name: Accept licenses
-        run: yes | sdkmanager --licenses
+       -name: Accept licenses
+      run: yes | sdkmanager --licenses
 
-      - name: Install SDK packages
-        run: |
+      -name: Install SDK packages
+      run: |
           sdkmanager "platform-tools"
           sdkmanager "platforms;android-33"
           sdkmanager "build-tools;33.0.2"
 
-      - name: Clean buildozer cache
-        run: rm -rf .buildozer ~/.buildozer
+      -name: Clean buildozer cache
+      run: rm -rf .buildozer ~/.buildozer
 
-      - name: Build APK
-        run: buildozer android debug
+      -name: Build APK
+      run: buildozer android debug
