@@ -1,17 +1,16 @@
 [app]
-title = Tarifador Rosario
-package.name = tarifadorrosario
-package.domain = org.taxi
-source.include_exts = py,png,jpg,kv,atlas
+title = Taxi Calculator
+package.name = taxicalc
+package.domain = org.taxicalc
+
+source.dir = .
+source.include_exts = py,png,jpg,kv
+
 version = 1.0
+
 requirements = python3,kivy
 
-# Permisos necesarios
-android.permissions = INTERNET
-
-# Orientación fija
 orientation = portrait
+fullscreen = 0
 
-[buildozer]
-log_level = 2
-warn_on_root = 1
+android.permissions = INTERNET
