@@ -34,6 +34,9 @@ jobs:
       - name: Build APK
         run: |
           export ANDROID_SDK_ROOT=$HOME/android-sdk
+          # Limpiar compilaciones previas
+          buildozer android clean
+          # Compilar APK
           buildozer android debug
 
       - name: Upload APK
