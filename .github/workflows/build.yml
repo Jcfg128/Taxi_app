@@ -46,7 +46,7 @@ jobs:
           # Aceptar licencias automáticamente
           yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT --licenses
 
-          # Instalar herramientas necesarias (estables)
+          # Instalar herramientas necesarias (Build-Tools estable)
           $ANDROID_SDK_ROOT/cmdline-tools/latest/latest/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT \
             "platform-tools" "platforms;android-33" "build-tools;33.0.0" "ndk;25.1.8937393"
 
